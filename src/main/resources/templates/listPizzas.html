@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <link href="https://getbootstrap.com/docs/4.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="css/all.css" rel="stylesheet">
+
+    <title>Pizza Order page - Welcome and choose pizza</title>
+    <style type="text/css">
+        body {
+            width: 800px;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1 class="pt-5">Welcome to our Pizza Delivery App</h1>
+</header>
+<main>
+    <div class="pizza">
+    <div class="row pt-5">
+        <main class="container">
+            <h2>Choose pizza:</h2>
+            <form method="post" action="/selectPizza.do">
+                <div th:each="pizza : ${pizzas}">
+                    <input type="radio" name="pizza" th:value="${pizza.name}"><span th:text="${pizza.name}"></span><br/>
+                </div>
+                <br/>
+                <button type="submit">Submit</button>
+            </form>
+        </main>
+    </div>
+    </div>
+</main>
+</body>
+</html>

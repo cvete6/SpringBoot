@@ -1,0 +1,113 @@
+# For a quick start check out our HTTP Requests collection (Tools|HTTP Client|Open HTTP Requests Collection).
+#
+# Following HTTP Request Live Templates are available:
+# * 'gtrp' and 'gtr' create a GET request with or without query parameters;
+# * 'ptr' and 'ptrp' create a POST request with a simple or parameter-like body;
+# * 'mptr' and 'fptr' create a POST request to submit a form with a text or file field (multipart/form-data);
+
+GET http://localhost:8080/rest/ingredients
+page-size:10
+
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+###
+###
+POST http://localhost:8080/rest/ingredients
+Content-Type: application/x-www-form-urlencoded
+
+name=mozarella&spicy=false&amount=5&veggie=false
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 201, "Response status is not 201");
+  client.assert(response.headers.valueOf("Location")!= null, "Invalid Location");
+  client.assert(response.body.hasOwnProperty("id"), 'Can not find the ingredient id');
+  client.global.set("newIngredientUrl", response.headers.valueOf("Location"));
+  client.global.set("id", response.body["id"]);
+});
+%}
+
+###
+POST http://localhost:8080/rest/ingredients
+Content-Type: application/x-www-form-urlencoded
+
+name=bacon&spicy=false&amount=8&veggie=false
+###
+POST http://localhost:8080/rest/ingredients
+Content-Type: application/x-www-form-urlencoded
+
+name=tomato+sauce&spicy=false&amount=10&veggie=true
+###
+PATCH http://localhost:8080/rest/ingredients/tomatosauce
+Content-Type: application/x-www-form-urlencoded
+
+name=tomatosauce&spicy=false&amount=10&veggie=true
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 201");
+  client.assert(response.body.hasOwnProperty("id"), 'Can not find the ingredient id');
+});
+%}
+
+###
+
+DELETE http://localhost:8080/rest/ingredients/tomatosauce
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+###
+GET http://localhost:8080/rest/ingredients/mozarella
+
+###
+GET http://localhost:8080/rest/ingredients?spicy=true
+page-size:10
+
+
+###
+POST http://localhost:8080/rest/pizzas
+Content-Type: application/x-www-form-urlencoded
+
+name=Margherita&description=Margherita&ingredientId=mozarella&veggie=false
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 201, "Response status is not 201");
+  client.assert(response.headers.valueOf("Location")!= null, "Invalid Location");
+  client.assert(response.body.hasOwnProperty("id"), 'Can not find the ingredient id');
+  client.global.set("newIngredientUrl", response.headers.valueOf("Location"));
+  client.global.set("id", response.body["id"]);
+});
+%}
+
+###
+PUT http://localhost:8080/rest/pizzas/Margherita
+Content-Type: application/x-www-form-urlencoded
+
+name=Margherita&description=Margherita&ingredientId=tomato+sauce&veggie=false
+
+###
+GET http://localhost:8080/rest/pizzas
+
+###
+GET http://localhost:8080/rest/ingredients/mozarella/pizzas
+
+###
+GET http://localhost:8080/rest/pizzas?totalIngredients=3
+
+###
+DELETE http://localhost:8080/rest/pizzas/Margherita
+
+###
+GET http://localhost:8080/rest/pizzas/compare?pizza1=Carbonara&pizza2=Margherita
+
+###
